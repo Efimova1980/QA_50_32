@@ -1,10 +1,16 @@
 package pages;
 
+import dto.Student;
+import enums.Gender;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
+
+import java.security.Key;
 
 public class PracticeFormPage extends BasePage{
     public PracticeFormPage(WebDriver driver){
@@ -31,7 +37,7 @@ public class PracticeFormPage extends BasePage{
     WebElement inputSubject;
 
     @FindBy(xpath = "//textarea[@placeholder='Current Address']")
-    WebElement textareaCurAddress;
+    WebElement inputAddress;
 
     @FindBy(id = "react-select-3-input")
     WebElement inputState;
@@ -45,12 +51,51 @@ public class PracticeFormPage extends BasePage{
     @FindBy(id = "example-modal-sizes-title-lg")
     WebElement modalMessage;
 
+    public void typePracticeForm(Student student){
+        hideBanner();
+        hideFooter();
+        scrollDown();
+        inputFirstName.sendKeys(student.getName());
+        inputLastName.sendKeys(student.getLastName());
+        inputUserEmail.sendKeys(student.getEmail());
+        inputMobail.sendKeys(student.getMobile());
+        inputAddress.sendKeys(student.getAddress());
+        pause(2);
+        typeGender(student.getGender());
+        pause(2);
+        typeDateOfBirth(student.getDateOfBirth());
+        pause(2);
+        typeSubjects(student.getSubjects());
+        btnSubmit.click();
+    }
 
+    private void typeGender(Gender gender){
+        WebElement btnGender = driver.findElement(By.xpath(gender.getLocator()));
+        btnGender.click();
+    }
 
+    private void typeDateOfBirth(String dateOfBirth){
+        inputBirthDate.click();
+        String operationSystem = System.getProperty("os.name");
+        System.out.println(operationSystem);
+        if (operationSystem.startsWith("Win"))
+            inputBirthDate.sendKeys(Keys.chord(Keys.CONTROL, "a"));
+        else if (operationSystem.startsWith("Mac"))
+            inputBirthDate.sendKeys(Keys.chord(Keys.COMMAND, "a"));
+        inputBirthDate.sendKeys(dateOfBirth);
+        inputBirthDate.sendKeys(Keys.chord(Keys.ENTER));
+    }
 
+    private void typeSubjects(String subjects){
+        inputSubject.click();
+        String[] arr = subjects.split(",");
+        for (String s: arr){
+            inputSubject.sendKeys(s);
+            inputSubject.sendKeys(Keys.ENTER);
+        }
+    }
 
-
-
-
-
+    public boolean validateModalMessage(String text){
+        return validateTextInElement(modalMessage, text);
+    }
 }
