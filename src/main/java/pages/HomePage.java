@@ -13,12 +13,13 @@ public class HomePage extends BasePage{
         PageFactory.initElements(new AjaxElementLocatorFactory(driver,10),this);
     }
 
-    @FindBy(xpath = "//div[@class ='category-cards']/div[2]")
+    //@FindBy(xpath = "//div[@class ='category-cards']/div[2]")
+    @FindBy(xpath = "//div[@class ='category-cards']/a[@href='/forms']")
     WebElement btnForms;
 
     public void clickBtnForms(){
-        hideBanner();
-        hideFooter();
+        //hideBanner();
+        //hideFooter();
         btnForms.click();
     }
 }

@@ -2,6 +2,7 @@ package pages;
 
 import dto.Student;
 import enums.Gender;
+import enums.Hobbies;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -11,6 +12,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 
 import java.security.Key;
+import java.util.List;
 
 public class PracticeFormPage extends BasePage{
     public PracticeFormPage(WebDriver driver){
@@ -52,21 +54,37 @@ public class PracticeFormPage extends BasePage{
     WebElement modalMessage;
 
     public void typePracticeForm(Student student){
-        hideBanner();
-        hideFooter();
+        //hideBanner();
+        //hideFooter();
         scrollDown();
         inputFirstName.sendKeys(student.getName());
         inputLastName.sendKeys(student.getLastName());
         inputUserEmail.sendKeys(student.getEmail());
         inputMobail.sendKeys(student.getMobile());
         inputAddress.sendKeys(student.getAddress());
-        pause(2);
         typeGender(student.getGender());
-        pause(2);
         typeDateOfBirth(student.getDateOfBirth());
-        pause(2);
         typeSubjects(student.getSubjects());
+        typeHobbies(student.getHobby());
+        typeStateCity(student.getState(), student.getCity());
         btnSubmit.click();
+    }
+
+    private void typeStateCity(String state, String city){
+        inputState.sendKeys(state);
+        inputState.sendKeys(Keys.ENTER);
+        inputCity.sendKeys(city);
+        inputCity.sendKeys(Keys.ENTER);
+    }
+
+    private void typeHobbies(List<Hobbies> hobbies){
+        for (Hobbies h: hobbies){
+            switch (h){
+                case SPORTS -> driver.findElement(By.xpath(h.getLocator())).click();
+                case READING -> driver.findElement(By.xpath(h.getLocator())).click();
+                case MUSIC -> driver.findElement(By.xpath(h.getLocator())).click();
+            }
+        }
     }
 
     private void typeGender(Gender gender){
@@ -83,7 +101,7 @@ public class PracticeFormPage extends BasePage{
         else if (operationSystem.startsWith("Mac"))
             inputBirthDate.sendKeys(Keys.chord(Keys.COMMAND, "a"));
         inputBirthDate.sendKeys(dateOfBirth);
-        inputBirthDate.sendKeys(Keys.chord(Keys.ENTER));
+        inputBirthDate.sendKeys(Keys.ENTER);
     }
 
     private void typeSubjects(String subjects){
