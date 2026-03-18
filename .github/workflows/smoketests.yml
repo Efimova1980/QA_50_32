@@ -28,7 +28,7 @@ jobs:
      uses: gradle/actions/setup-gradle@v4
 
    - name: Build with Gradle Wrapper
-     run: .\gradlew clean smoketests --info
+     run: .\gradlew clean smoketests --test "*"
 
    - name: Upload screenshots
      if: always()
@@ -36,3 +36,9 @@ jobs:
      with:
        name: screenshots
        path: build/screenshots/
+
+   - name: Upload Test Reports
+     uses: actions/upload-artifact@v3
+     with:
+       name: smoketest-report
+       path: build/reports/tests/smoketests
